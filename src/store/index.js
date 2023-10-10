@@ -1,5 +1,4 @@
-import { combineReducers, applyMiddleware, compose } from 'redux';
-import { configureStore } from '@reduxjs/toolkit';
+import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import session from './session';
 import dogsReducer from './dogs';
@@ -22,9 +21,8 @@ if (process.env.NODE_ENV === 'production') {
   enhancer = composeEnhancers(applyMiddleware(thunk, logger));
 }
 
-const configStore = configureStore({
-  reducer: rootReducer,
-  middleware: enhancer,
-});
+const configureStore = (preloadedState) => {
+  return createStore(rootReducer, preloadedState, enhancer);
+};
 
-export default configStore;
+export default configureStore;
