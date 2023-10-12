@@ -6,7 +6,7 @@ import { loginAuth } from '../../store/session';
 
 function Homepage() {
   const isAuthenticated = useSelector(state => state.session?.user !== null);
-  const currentUser = useSelector(state => state.session?.user )
+  const currentUser = useSelector(state => state.session?.user?.name )
   console.log('this is the currentUser', currentUser)
   const [errors, setErrors] = useState([]);
   const [email, setEmail] = useState('');

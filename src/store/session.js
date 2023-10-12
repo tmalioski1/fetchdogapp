@@ -2,11 +2,9 @@
 const SET_USER = 'session/SET_USER';
 const REMOVE_USER = 'session/REMOVE_USER';
 
-const setUser = () => ({
+const setUser = (name, email) => ({
   type: SET_USER,
-  payload: {
-    'testKey': 'testValue'
-  }
+  payload: { name, email }
 });
 
 const removeUser = () => ({
@@ -31,7 +29,7 @@ export const loginAuth = (name, email) => async (dispatch) => {
     });
 
     if (response.ok) {
-      dispatch(setUser());
+      dispatch(setUser(name, email));
     } else {
       if (response.status === 400) {
         const errorText = await response.text();
@@ -66,7 +64,7 @@ export const logout = () => async (dispatch) => {
 const sessionReducer = (state = initialState, action) => {
   switch (action.type) {
     case SET_USER:
-      return { user: action.payload.testValue };
+      return { user: { name: action.payload.name, email: action.payload.email } };
     case REMOVE_USER:
       return { user: null };
     default:
