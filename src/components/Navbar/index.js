@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
-
+import LogoutButton from './LogoutButton'
 
 
 const Navbar = () => {
 
-
    return (
     <div>
-      Hello
+      <LogoutButton />
     </div>
   );
 }

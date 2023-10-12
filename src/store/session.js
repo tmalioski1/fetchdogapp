@@ -49,6 +49,7 @@ export const loginAuth = (name, email) => async (dispatch) => {
 
 export const logout = () => async (dispatch) => {
   const response = await fetch('https://frontend-take-home-service.fetch.com/auth/logout', {
+    method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
