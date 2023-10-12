@@ -6,33 +6,23 @@ import { loginAuth } from '../../store/session';
 
 function Homepage() {
   const isAuthenticated = useSelector(state => state.session?.user !== null);
-  const currentUser = useSelector(state => state.sessuion?.user )
+  const currentUser = useSelector(state => state.session?.user )
   const [errors, setErrors] = useState([]);
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const dispatch = useDispatch();
   const history = useNavigate()
 
+
 const onLogin = async (e) => {
   e.preventDefault();
-  try {
-    const response = await dispatch(loginAuth(name, email));
-    if (response.ok) {
-      // Successful response, do something if needed
-      history('/search'); // Navigate to the search route
-    } else {
-      // Handle non-JSON response (e.g., plain text or HTML)
-      const data = await response.text(); // Read the response as text
-      console.error(`Bad Request: ${data}`);
-      setErrors([`Bad Request: ${data}`]);
-    }
-  } catch (error) {
-    console.error(`Error: ${error.message}`);
-    setErrors([`An error occurred: ${error.message}`]);
+  const data = await dispatch(loginAuth(name, email));
+  if (data) {
+    setErrors(data);
+  } else {
+    history('/search');
   }
 };
-
-
 
 
   const updateEmail = (e) => {
@@ -70,9 +60,9 @@ const onLogin = async (e) => {
           </div>
           <div className='name-container'>
             <input
-              name='password'
-              type='password'
-              placeholder='Password'
+              name='name'
+              type='text'
+              placeholder='name'
               value={name}
               onChange={updateName}
             />

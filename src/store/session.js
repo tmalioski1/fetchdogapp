@@ -2,9 +2,11 @@
 const SET_USER = 'session/SET_USER';
 const REMOVE_USER = 'session/REMOVE_USER';
 
-const setUser = (user) => ({
+const setUser = () => ({
   type: SET_USER,
-  payload: user
+  payload: {
+    'testKey': 'testValue'
+  }
 });
 
 const removeUser = () => ({
@@ -15,33 +17,37 @@ const initialState = { user: null };
 
 
 export const loginAuth = (name, email) => async (dispatch) => {
+  try {
     const response = await fetch(`https://frontend-take-home-service.fetch.com/auth/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        credentials: 'include',
-        body: JSON.stringify({
-          name,
-          email
-        })
-      });
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include',
+      body: JSON.stringify({
+        name: name,
+        email: email
+      })
+    });
 
-
-  if (response.ok) {
-    const data = await response.json();
-    dispatch(setUser(data))
-    return null;
-  } else if (response.status < 500) {
-    const data = await response.json();
-    if (data.errors) {
-      return data.errors;
+    if (response.ok) {
+      dispatch(setUser());
+    } else {
+      if (response.status === 400) {
+        const errorText = await response.text();
+        return { errors: [errorText] };
+      } else if (response.status === 401) {
+        return { errors: ['Unauthorized'] };
+      } else {
+        return { errors: ['An error occurred. Please try again.'] };
+      }
     }
-  } else {
-    return ['An error occurred. Please try again.']
+  } catch (error) {
+    console.error(`An error occurred: ${error.message}`);
+    throw error;
   }
+};
 
-}
 
 export const logout = () => async (dispatch) => {
   const response = await fetch('https://frontend-take-home-service.fetch.com/auth/logout', {
@@ -57,13 +63,16 @@ export const logout = () => async (dispatch) => {
 };
 
 
-export default function reducer(state = initialState, action) {
+const sessionReducer = (state = initialState, action) => {
   switch (action.type) {
     case SET_USER:
-      return { user: action.payload }
+      return { user: action.payload.testValue };
     case REMOVE_USER:
-      return { user: null }
+      return { user: null };
     default:
       return state;
   }
-}
+};
+
+
+export default sessionReducer
