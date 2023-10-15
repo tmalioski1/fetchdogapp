@@ -1,7 +1,6 @@
 // searchActions.js
 
 const UPDATE_SEARCH_RESULTS = 'search/UPDATE_SEARCH_RESULTS';
-const UPDATE_DOG_BREEDS = 'search/UPDATE_DOG_BREEDS';
 
 
 const updateSearchResults = (results) => ({
@@ -9,10 +8,6 @@ const updateSearchResults = (results) => ({
   payload: results,
 });
 
-const updateDogBreeds = (breeds) => ({
-    type: UPDATE_DOG_BREEDS,
-    payload: breeds,
-  });
 
 
 export const fetchSearchResults = (filterOptions, sortOption) => async (dispatch) => {
@@ -52,29 +47,6 @@ export const fetchSearchResults = (filterOptions, sortOption) => async (dispatch
     }
   };
 
-  export const fetchDogBreeds = () => async (dispatch) => {
-    try {
-      const apiUrl = new URL('https://frontend-take-home-service.fetch.com/dogs/breeds');
-      const response = await fetch(apiUrl.toString(), {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        console.log('this is the breedlist data', data)
-        dispatch(updateDogBreeds(data));
-      } else {
-        // Handle errors
-      }
-    } catch (error) {
-      console.error(`An error occurred while fetching dog breeds: ${error.message}`);
-      throw error;
-    }
-  };
 
 
 const initialState = {
@@ -85,8 +57,7 @@ const initialState = {
     switch (action.type) {
       case UPDATE_SEARCH_RESULTS:
         return { ...state, searchResults: action.payload };
-      case UPDATE_DOG_BREEDS:
-        return { ...state, dogBreeds: action.payload };
+ 
 
       default:
         return state;
