@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import SearchComponent from './SearchComponent'
 
 
 
@@ -7,8 +8,9 @@ const DogSearch = () => {
 
    return (
     <div>
-      Hello doggies
+<SearchComponent />
     </div>
+
   );
 }
 

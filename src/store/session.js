@@ -27,7 +27,6 @@ export const loginAuth = (name, email) => async (dispatch) => {
         email: email
       })
     });
-
     if (response.ok) {
       dispatch(setUser(name, email));
     } else {

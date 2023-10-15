@@ -2,11 +2,13 @@ import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import sessionReducer from './session';
 import dogsReducer from './dogs';
+import searchReducer from './search'
 
 
 const rootReducer = combineReducers({
   session: sessionReducer,
   dogs: dogsReducer,
+  search: searchReducer
 
 });
 
