@@ -23,8 +23,7 @@ export const fetchSearchResults = (filterOptions, sortOption) => async (dispatch
         },
         credentials: 'include',
       });
-      console.log('this is the response---', response)
-      console.log('total', response.total)
+
 
 
       if (response.ok) {
@@ -33,12 +32,14 @@ export const fetchSearchResults = (filterOptions, sortOption) => async (dispatch
         console.log('total', data.total);
 
 
-        // Assuming the API response contains an array of dog IDs in resultIds
-        const dogIds = data.resultIds;
-
-        // Dispatch an action to update the store with the dog IDs
-        dispatch(updateSearchResults(dogIds));
-      } else {
+        dispatch(updateSearchResults({
+            resultIds: data.resultIds,
+            next: data.next,
+            total: data.total,
+            prev: data.prev,
+          }));
+              }
+              else {
         // Handle errors
       }
     } catch (error) {
@@ -47,17 +48,24 @@ export const fetchSearchResults = (filterOptions, sortOption) => async (dispatch
     }
   };
 
-
-
-const initialState = {
+  const initialState = {
     searchResults: [],
+    next: null,
+    total: 0,
+    prev: null,
   };
+
 
   const searchReducer = (state = initialState, action) => {
     switch (action.type) {
       case UPDATE_SEARCH_RESULTS:
-        return { ...state, searchResults: action.payload };
- 
+        return {
+          ...state,
+          searchResults: action.payload.resultIds,
+          next: action.payload.next,
+          total: action.payload.total,
+          prev: action.payload.prev,
+        };
 
       default:
         return state;
