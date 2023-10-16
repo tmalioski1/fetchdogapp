@@ -6,24 +6,25 @@ import { fetchDogBreeds } from '../../store/dogs';
 const SearchComponent = () => {
   const dispatch = useDispatch();
 
-  // Define the selector directly in your component
   const selectSearchResults = (state) => state.search?.searchResults;
 
   const searchResults = useSelector(selectSearchResults) || [];
-  console.log('these are searchResults', searchResults)
+  console.log('these are the search results', searchResults)
+
 
   const [filterOptions, setFilterOptions] = useState({
-    breeds: [], // Initialize with an empty array for breed filter
-    // Add more filter options (age, location, etc.) as needed
+    breeds: [],
+    page: 1
   });
 
-  const [sortOption, setSortOption] = useState('asc'); // Initialize with default sort option
+  const [sortOption, setSortOption] = useState('asc');
 
   useEffect(() => {
     dispatch(fetchDogBreeds());
-  }, []);
+  }, [dispatch]);
+
   const handleSearch = () => {
-    // Dispatch the fetchSearchResults thunk with filter and sort options
+
     dispatch(fetchSearchResults(filterOptions, sortOption));
   };
 
@@ -31,10 +32,10 @@ const SearchComponent = () => {
     <div>
       <h2>Search for Dogs</h2>
       <div>
-        <label htmlFor="Search">Search:</label>
+        <label htmlFor="breed">Breed:</label>
         <input
           type="text"
-          id="search"
+          id="breed"
           value={filterOptions.breeds.join(',')}
           onChange={(e) => setFilterOptions({ ...filterOptions, breeds: e.target.value.split(',') })}
         />
@@ -50,9 +51,21 @@ const SearchComponent = () => {
       <div>
         <ul>
           {searchResults.map((dog) => (
-            <li key={dog.id}>{dog.name}, {dog.breed}, {dog.age} years old</li>
+            <li key={dog.id}>
+              <p>Name: {dog.name}</p>
+              <p>Breed: {dog.breed}</p>
+              <p>Age: {dog.age} years old</p>
+            </li>
           ))}
         </ul>
+      </div>
+      <div>
+        <button onClick={() => setFilterOptions({ ...filterOptions, page: filterOptions.page - 1 })}>
+          Previous Page
+        </button>
+        <button onClick={() => setFilterOptions({ ...filterOptions, page: filterOptions.page + 1 })}>
+          Next Page
+        </button>
       </div>
     </div>
   );
