@@ -55,7 +55,7 @@ export const fetchSearchResults = (filterOptions, sortOption) => async (dispatch
     prev: null,
   };
 
-  
+
 
 
   const searchReducer = (state = initialState, action) => {

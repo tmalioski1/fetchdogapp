@@ -35,7 +35,6 @@ const SearchComponent = () => {
   const handleSearch = () => {
     dispatch(fetchSearchResults(filterOptions, sortOption));
   };
-  console.log('these are the dogDetails---', dogDetails)
 
   return (
     <div>
@@ -65,6 +64,7 @@ const SearchComponent = () => {
           if (matchedDog) {
             return (
               <li key={dogId}>
+                <img src={matchedDog.img} alt={matchedDog.name} />
                 <p>Name: {matchedDog.name}</p>
                 <p>Breed: {matchedDog.breed}</p>
                 <p>Age: {matchedDog.age} years old</p>
