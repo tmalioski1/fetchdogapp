@@ -40,7 +40,7 @@ export const fetchSearchResults = (filterOptions, sortOption) => async (dispatch
           }));
               }
               else {
-        // Handle errors
+        return('there was an error')
       }
     } catch (error) {
       console.error(`An error occurred: ${error.message}`);
@@ -54,6 +54,8 @@ export const fetchSearchResults = (filterOptions, sortOption) => async (dispatch
     total: 0,
     prev: null,
   };
+
+  
 
 
   const searchReducer = (state = initialState, action) => {

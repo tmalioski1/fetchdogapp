@@ -1,32 +1,41 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchSearchResults } from '../../store/search';
-import { fetchDogBreeds } from '../../store/dogs';
+import { fetchDogBreeds, fetchDogDetails } from '../../store/dogs';
+
 
 const SearchComponent = () => {
   const dispatch = useDispatch();
 
-  const selectSearchResults = (state) => state.search?.searchResults;
 
-  const searchResults = useSelector(selectSearchResults) || [];
-  console.log('these are the search results', searchResults)
-
-
+  const searchResults = useSelector(state => state.search?.searchResults)
+  const dogDetails = useSelector(state => state.dogs?.dogs)
+  console.log('these are the dogDetails', dogDetails)
   const [filterOptions, setFilterOptions] = useState({
     breeds: [],
-    page: 1
+    page: 1,
   });
 
   const [sortOption, setSortOption] = useState('asc');
+
+
+
+
 
   useEffect(() => {
     dispatch(fetchDogBreeds());
   }, [dispatch]);
 
-  const handleSearch = () => {
+  useEffect(() => {
+    if (searchResults.length > 0) {
+      dispatch(fetchDogDetails(searchResults))
+    }
+  }, [dispatch, searchResults]);
 
+  const handleSearch = () => {
     dispatch(fetchSearchResults(filterOptions, sortOption));
   };
+  console.log('these are the dogDetails---', dogDetails)
 
   return (
     <div>
@@ -49,15 +58,24 @@ const SearchComponent = () => {
       </div>
       <button onClick={handleSearch}>Search</button>
       <div>
-        <ul>
-          {searchResults.map((dog) => (
-            <li key={dog.id}>
-              <p>Name: {dog.name}</p>
-              <p>Breed: {dog.breed}</p>
-              <p>Age: {dog.age} years old</p>
-            </li>
-          ))}
-        </ul>
+      <ul>
+        {searchResults.map((dogId) => {
+          const matchedDog = dogDetails.find((dogDetail) => dogDetail.id === dogId);
+
+          if (matchedDog) {
+            return (
+              <li key={dogId}>
+                <p>Name: {matchedDog.name}</p>
+                <p>Breed: {matchedDog.breed}</p>
+                <p>Age: {matchedDog.age} years old</p>
+              </li>
+            );
+          }
+
+          return null
+        })}
+      </ul>
+
       </div>
       <div>
         <button onClick={() => setFilterOptions({ ...filterOptions, page: filterOptions.page - 1 })}>
